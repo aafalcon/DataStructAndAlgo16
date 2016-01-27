@@ -85,7 +85,6 @@ int main(int argc, char* argv[])
 		  	  }
 		  	  delete [] trojans[i];
 		  }
-
 	  }
 	  else if (curr == "OBTAIN") {
 	  	  int i,j,k;
@@ -99,16 +98,67 @@ int main(int argc, char* argv[])
 		  else if ((j >= floorsizes[i]) || (j < 0))
 		  {
 		  	  output << "Error - there is no student " << j;
-		  	  output << " on floor " << i;
+		  	  output << " on floor " << i << endl;
 		  }
-		  else if (trojans[i][j][k] == NULL)
+		  else if (trojans[i][j] != NULL)
+		  {
+		  	  output << "Error - student " << j;
+		  	  output << " already has possessions" << endl;
+		  }
+		  else
+		  {
+		  	  trojans[i][j]= new string[k+1];
+		  	  string item;
+		  	  trojans[i][j][0]= k;
+		  	  for (int it=1; it<=k; it++)
+		  	  {
+		  	  	  ss >> item;
+		  	  	  trojans[i][j][it]= item;
+		  	  }
+		  }
 	  }
 	  else if (curr == "OUTPUT") {
-
+	  	  int i,j;
+		  ss >> i;
+		  ss >> j;
+		  if (ss.fail()) 
+		  {
+			  output << "Error - incorrect command" << endl;
+		  }
+		  else if ((j >= floorsizes[i]) || (j < 0))
+		  {
+		  	  output << "Error - there is no student " << j;
+		  	  output << " on floor " << i << endl;
+		  }
+		  else if (trojans[i][j] == NULL)
+		  {
+		  	  output << "Error - student " << j;
+		  	  output << " has no possessions" << endl;
+		  }
+		  else
+		  {
+		  	  int numItems= trojans[i][j][0];
+		  	  for (int k=1; k<=numItems; k++)
+		  	  {
+		  	  	  output << trojans[i][j][k] << endl;
+		  	  }
+		  }
 	  }
 	  else {
-
+	  	  output << "Error - incorrect command" << endl;
 	  }
   }
+  
+  //Deallocate all memory
+  for (int i=0; i<floors; i++)
+  {
+  	  for (int j=0; j<floorsizes[i]; j++)
+ 	  {
+  	      delete [] trojans[i][j];
+  	  }
+  	  delete [] trojans[i];
+  }
+  delete [] trojans;
+  
   return 0;
 }
