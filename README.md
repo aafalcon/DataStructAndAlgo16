@@ -1,5 +1,5 @@
 # CS 104 Student Repository
 
-- **Name**: Tommy Trojan
-- **USC ID**: 1234567890
-- **Email**: ttrojan@usc.edu
+- **Name**: Alden Falcon
+- **USC ID**: 2291459231
+- **Email**: afalcon@usc.edu
