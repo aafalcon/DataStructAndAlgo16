@@ -28,6 +28,8 @@ int main(int argc, char* argv[])
 	  floorsizes[i] = 0;
 	  trojans[i] = NULL;
   }
+  //skip first line
+  getline(input,curr);
   while(getline(input, curr)) {
 	  stringstream ss;
 	  ss << curr;
@@ -40,16 +42,19 @@ int main(int argc, char* argv[])
 		  {
 			  output << "Error - incorrect command" << endl;
 		  }
+		  // Error if there are no occupants on floor i
 		  else if (floorsizes[i] != 0)
 		  {
 		  	  output << "Error - floor " << i;
 		  	  output << " is not empty" << endl;
 		  }
+		  // Error if floor i is out of range of total floors
 		  else if ((i >= floors) || (i < 0))
 		  {
 		  	  output << "Error - floor " << i;
 		  	  output << " does not exist" << endl;
 		  }
+		  // Allocate memory for k students on floor i
 		  else 
 		  { 
 		      trojans[i]= new string*[k];
@@ -67,11 +72,13 @@ int main(int argc, char* argv[])
 	  	  {
 			  output << "Error - incorrect command" << endl;
 		  }
+		  // Error if there are 0 students on floor i
 		  else if (floorsizes[i] == 0)
 		  {
 		  	  output << "Error - floor " << i;
 		  	  output << " is empty" << endl;
 		  }
+		  // Error if floor i is out of range of total floors
 		  else if ((i >= floors) || (i < 0))
 		  {
 		  	  output << "Error - floor " << i;
@@ -79,6 +86,7 @@ int main(int argc, char* argv[])
 		  }
 		  else
 		  {
+		  	  // Deallocate memory for floor i
 		  	  for (int j=0; j<floorsizes[i]; j++)
 		  	  {
 		  	  	  delete [] trojans[i][j];
@@ -95,25 +103,31 @@ int main(int argc, char* argv[])
 		  {
 			  output << "Error - incorrect command" << endl;
 		  }
+		  // Error if student j is out of range of total students
 		  else if ((j >= floorsizes[i]) || (j < 0))
 		  {
 		  	  output << "Error - there is no student " << j;
 		  	  output << " on floor " << i << endl;
 		  }
+		  // Error if student j already has memory allocated for
+		  // his/her possessions
 		  else if (trojans[i][j] != NULL)
 		  {
 		  	  output << "Error - student " << j;
 		  	  output << " already has possessions" << endl;
 		  }
+		  // Allocate memory for possessions
 		  else
 		  {
 		  	  trojans[i][j]= new string[k+1];
-		  	  string item;
+		  	  // First element in array is the # of possessions
+		  	  string poss;
 		  	  trojans[i][j][0]= k;
 		  	  for (int it=1; it<=k; it++)
 		  	  {
-		  	  	  ss >> item;
-		  	  	  trojans[i][j][it]= item;
+		  	  	  // Assign all the possesions starting at index 1
+		  	  	  ss >> poss;
+		  	  	  trojans[i][j][it]= poss;
 		  	  }
 		  }
 	  }
@@ -125,31 +139,39 @@ int main(int argc, char* argv[])
 		  {
 			  output << "Error - incorrect command" << endl;
 		  }
+		  // Error if student j is out of range of total students
 		  else if ((j >= floorsizes[i]) || (j < 0))
 		  {
 		  	  output << "Error - there is no student " << j;
 		  	  output << " on floor " << i << endl;
 		  }
+		  // Error if student j doesn't have memory allocated for
+		  // his/her possessions
 		  else if (trojans[i][j] == NULL)
 		  {
 		  	  output << "Error - student " << j;
 		  	  output << " has no possessions" << endl;
 		  }
+		  // Print student's possessions to output
 		  else
 		  {
-		  	  int numItems= trojans[i][j][0];
-		  	  for (int k=1; k<=numItems; k++)
+		  	  stringstream ss2;
+		  	  int numPoss;
+		  	  ss2 << trojans[i][j][0];
+		  	  ss2 >> numPoss;
+		  	  for (int k=1; k<=numPoss; k++)
 		  	  {
 		  	  	  output << trojans[i][j][k] << endl;
 		  	  }
 		  }
 	  }
+	  // Error if command is not recognized
 	  else {
 	  	  output << "Error - incorrect command" << endl;
 	  }
   }
   
-  //Deallocate all memory
+  // Deallocate all memory
   for (int i=0; i<floors; i++)
   {
   	  for (int j=0; j<floorsizes[i]; j++)
