@@ -5,12 +5,14 @@
 using namespace std;
 
 int main(int argc, char * argv[]) {
+	// Must include one input file
 	if (argc != 2)
 	{
-		cout << "Incorrect number of command line arguments";
+		cerr << "Incorrect number of command line arguments" << endl;
 		return 1;
 	}
 	
+	// Create file stream and array of words
 	ifstream inFile(argv[1]);
 	int numWords;
 	inFile >> numWords;

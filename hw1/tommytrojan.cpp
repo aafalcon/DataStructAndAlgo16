@@ -42,17 +42,17 @@ int main(int argc, char* argv[])
 		  {
 			  output << "Error - incorrect command" << endl;
 		  }
-		  // Error if there are no occupants on floor i
-		  else if (floorsizes[i] != 0)
-		  {
-		  	  output << "Error - floor " << i;
-		  	  output << " is not empty" << endl;
-		  }
 		  // Error if floor i is out of range of total floors
 		  else if ((i >= floors) || (i < 0))
 		  {
 		  	  output << "Error - floor " << i;
 		  	  output << " does not exist" << endl;
+		  }
+		  // Error if there are no occupants on floor i
+		  else if (floorsizes[i] != 0)
+		  {
+		  	  output << "Error - floor " << i;
+		  	  output << " is not empty" << endl;
 		  }
 		  // Allocate memory for k students on floor i
 		  else 
@@ -72,17 +72,17 @@ int main(int argc, char* argv[])
 	  	  {
 			  output << "Error - incorrect command" << endl;
 		  }
-		  // Error if there are 0 students on floor i
-		  else if (floorsizes[i] == 0)
-		  {
-		  	  output << "Error - floor " << i;
-		  	  output << " is empty" << endl;
-		  }
 		  // Error if floor i is out of range of total floors
 		  else if ((i >= floors) || (i < 0))
 		  {
 		  	  output << "Error - floor " << i;
 		  	  output << " does not exist" << endl;
+		  }
+		  // Error if there are 0 students on floor i
+		  else if (floorsizes[i] == 0)
+		  {
+		  	  output << "Error - floor " << i;
+		  	  output << " is empty" << endl;
 		  }
 		  else
 		  {
@@ -91,7 +91,8 @@ int main(int argc, char* argv[])
 		  	  {
 		  	  	  delete [] trojans[i][j];
 		  	  }
-		  	  delete [] trojans[i];
+		  	  // Reset floor size
+		  	  floorsizes[i]= 0;
 		  }
 	  }
 	  else if (curr == "OBTAIN") {
@@ -121,8 +122,12 @@ int main(int argc, char* argv[])
 		  {
 		  	  trojans[i][j]= new string[k+1];
 		  	  // First element in array is the # of possessions
+		  	  // Converting this # into a string with stringstream
+		  	  stringstream ss2;
 		  	  string poss;
-		  	  trojans[i][j][0]= k;
+		  	  ss2 << k;
+		  	  ss2 >> poss;
+		  	  trojans[i][j][0]= poss;
 		  	  for (int it=1; it<=k; it++)
 		  	  {
 		  	  	  // Assign all the possesions starting at index 1
@@ -157,6 +162,9 @@ int main(int argc, char* argv[])
 		  {
 		  	  stringstream ss2;
 		  	  int numPoss;
+		  	  output << "Possessions of student " << j;
+		  	  output << " living on floor " << i << ":" << endl; 
+		  	  // Convert # of possesions from string back to int
 		  	  ss2 << trojans[i][j][0];
 		  	  ss2 >> numPoss;
 		  	  for (int k=1; k<=numPoss; k++)
@@ -181,6 +189,8 @@ int main(int argc, char* argv[])
   	  delete [] trojans[i];
   }
   delete [] trojans;
+
+  delete [] floorsizes;
   
   return 0;
 }
