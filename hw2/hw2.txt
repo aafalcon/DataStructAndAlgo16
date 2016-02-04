@@ -1,0 +1,92 @@
+Alden Falcon
+ID#: 2291459231
+CS104 HW2
+2/3/16
+
+Problem 1:
+	
+	Part (a): 
+	README.md (unmodified)
+	
+	Part (b): 
+	README.md (modified)
+	fun_problem.txt (untracked)
+
+	Part (c):
+	README.md (staged)
+	fun_problem.txt (staged)
+
+	Part (d): 
+	README.md (modified)
+	fun_problem.txt (modified)
+
+	Part (e):
+	README.md (staged)
+	fun_problem.txt (unmodified)
+	There are no contents in fun_problem.txt because the changes
+	since the last commit were discarded with the command git 
+	checkout -- <file>.
+
+	Part (f):
+	README.md (modified)
+	We reached this point because README had been modified without
+	having been staged or committed
+
+Problem 3:
+	
+	Part (a):
+	// Θ(n) linear for loop
+	for (int i = 0; i < n; i ++)
+	    // Worst case: if statement runs every time
+	    if (A[i] == 0) {
+	       // Θ(log(n)) bc iterator j doubles every iteration
+	       for (int j = 1; j < n; j *= 2)
+	          { /* do something that takes O(1) time */ }
+	    }
+	Runtime: Θ(n*log(n))
+
+	Part (b):
+	// Θ(n) linear for loop
+	for (int i = 1; i < n; i ++)
+	{
+	   // Θ(n) linear for loop
+	   for (int j = i; j < n; j ++)
+	   {
+	        // Worst case: if statement runs every time
+	        if (j % i == 0)
+	        {
+	            // Θ(log(n)) bc iterator k doubles every iteration
+	            for (int k = 1; k < n; k *= 2)
+	               { /* do something that takes O(1) time */ }
+	        }
+	   }
+	}
+	Runtime: Θ(n^2*log(n))
+
+	Part (c):
+	// Constant time Θ(1) 
+	int *a = new int [10];
+	int size = 10;
+	// Linear time Θ(n)
+	for (int i = 0; i < n; i ++) 
+	{
+	   // Overall constant time Θ(1) inside for loop
+	   // Only runs once
+	   if (i == size)
+	   {  
+	       // Constant time Θ(1) 
+	       int newsize = size+10;
+	       int *b = new int [newsize];
+	       // Constant time Θ(1) 
+	       for (int j = 0; j < size; j ++) b[j] = a[j];
+	       // Constant time Θ(1) 
+	       delete [] a;
+	       a = b;
+	       size = newsize;
+	   }
+	   // Constant time Θ(1) 
+	   a[i] = sqrt(i);
+	}
+
+
+
