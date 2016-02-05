@@ -61,3 +61,14 @@ Node* LList::merge(Node*& first, Node*& second) {
 	*/
 	
 }
+
+void LList::push(int n) {
+	Node* p = new Node;
+	p->next= head;
+	head= p;
+}
+
+int LList::pull() {
+	int temp= head->value;
+	head= head->next
+}
