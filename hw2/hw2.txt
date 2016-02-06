@@ -67,17 +67,18 @@ Problem 3:
 	// Constant time Θ(1) 
 	int *a = new int [10];
 	int size = 10;
-	// Linear time Θ(n)
+	// Θ(n) linear for loop
 	for (int i = 0; i < n; i ++) 
 	{
-	   // Overall constant time Θ(1) inside for loop
-	   // Only runs once
+	   // Overall linear time Θ(n) inside for loop
+	   // Worst case if statement will run
 	   if (i == size)
 	   {  
 	       // Constant time Θ(1) 
 	       int newsize = size+10;
 	       int *b = new int [newsize];
-	       // Constant time Θ(1) 
+	       // Worst case this will run linearly Θ(n) when
+	       // size gets close to n
 	       for (int j = 0; j < size; j ++) b[j] = a[j];
 	       // Constant time Θ(1) 
 	       delete [] a;
@@ -87,6 +88,26 @@ Problem 3:
 	   // Constant time Θ(1) 
 	   a[i] = sqrt(i);
 	}
+	Runtime: Θ(n^2)
 
-
-
+	Part (d):
+	// Constant time Θ(1)
+	int *a = new int [10];
+	int size = 10;
+	for (int i = 0; i < n; i ++) 
+	{
+	   if (i == size)
+	   {  
+	       // Constant time Θ(1)
+	       int newsize = 2*size;
+	       int *b = new int [newsize];
+	       
+	       for (int j = 0; j < size; j ++) b[j] = a[j];
+	       // Constant time Θ(1)
+	       delete [] a;
+	       a = b;
+	       size = newsize;
+	   }
+	   // Constant time Θ(1)
+	   a[i] = sqrt(i);
+	}

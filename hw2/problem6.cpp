@@ -1,7 +1,21 @@
 #include "problem6.h"
+#include <stdlib.h>
 
 LList::LList() {
 	head= NULL;
+}
+
+LList::~LList() {
+    if (head != NULL)
+    {
+    	Node* temp= head;  
+    	while (head != NULL)
+		{
+			Node* toDelete= temp;
+			temp= temp->next;
+			delete toDelete;
+		}
+    }
 }
 
 Node* LList::merge(Node*& first, Node*& second) {
@@ -64,11 +78,15 @@ Node* LList::merge(Node*& first, Node*& second) {
 
 void LList::push(int n) {
 	Node* p = new Node;
+	p->value= n;
 	p->next= head;
 	head= p;
 }
 
 int LList::pull() {
-	int temp= head->value;
-	head= head->next
+	Node* temp= head;
+	head= head->next;
+	int pullval= temp->value;
+	delete temp;
+	return pullval;
 }

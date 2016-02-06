@@ -8,9 +8,12 @@ struct Node {
 
 class LList {
 	public:
+		LList();
+		~LList();
 		Node* merge (Node*& first, Node*& second);
 		void push(int n);
 		int pull();
-	private:
-		Node* head;
-}
+		Node* head;	
+};
+
+#endif
