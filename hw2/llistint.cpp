@@ -51,7 +51,15 @@ void LListInt::insert(int loc, const int& val)
 	{
 		insertion->next= head_;
 		insertion->prev= NULL;
-		head_->prev= insertion;
+		// Check if list is empty
+		if (head_ == NULL)
+		{
+			tail_= insertion;
+		}
+		else
+		{
+			head_->prev= insertion;
+		}
 		head_= insertion;
 	}
 	// Insert a new tail
@@ -75,33 +83,41 @@ void LListInt::remove(int loc)
 	{
     	throw std::invalid_argument("bad location");
   	}
-
-  	Item* temp;
-  	// Remove something that's not head or tail
-  	if (loc > 0 && loc < size_-1)
+  	// Remove if there are items in list to remove
+  	if (size_ != 0)
   	{
-  		temp= getNodeAt(loc);
-  		temp->prev->next= temp->next;
-  		temp->next->prev= temp->prev;
-  		
-  	}
-  	// Remove the head
-  	else if (loc == 0)
-  	{
-  		temp= head_;
-  		temp->next->prev= NULL;
-  		head_= temp->next;
-  	}
-  	// Remove the tail
-  	else if (loc == size_-1)
-  	{
-  		temp= tail_;
-  		temp->prev->next= NULL;
-  		tail_= temp->prev;
-
-  	}
+  		Item* temp;
+	  	// Remove something that's not head or tail
+	  	if (loc > 0 && loc < size_-1)
+	  	{
+	  		temp= getNodeAt(loc);
+	  		temp->prev->next= temp->next;
+	  		temp->next->prev= temp->prev;
+	  		
+	  	}
+	  	// Remove the head
+	  	else if (loc == 0)
+	  	{
+	  		temp= head_;
+	  		// Check if there is more than 1 item in list
+	  		if (temp->next != NULL)
+	  		{
+	  			temp->next->prev= NULL;
+	  		}
+	  		head_= temp->next;
+	  	}
+	  	// Remove the tail
+	  	else if (loc == size_-1)
+	  	{
+	  		temp= tail_;
+	  		temp->prev->next= NULL;
+	  		tail_= temp->prev;
+	  	}
   	delete temp;
   	--size_;
+  	}
+
+  	
 }
 
 void LListInt::set(int loc, const int& val)
