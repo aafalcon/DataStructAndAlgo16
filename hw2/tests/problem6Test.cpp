@@ -48,6 +48,13 @@ int main () {
 		cerr << "Failure: first and/or second not set to NULL" << endl;
 	}
 
+	delete head;
+	delete second;
+	delete third;
+	delete head2;
+	delete second2;
+	delete third2;
+	delete merged;
 
 	return 0;
 }
