@@ -71,7 +71,7 @@ Problem 3:
 	for (int i = 0; i < n; i ++) 
 	{
 	   // Overall linear time Θ(n) inside for loop
-	   // Worst case if statement will run
+	   // If statement will run n/10 times
 	   if (i == size)
 	   {  
 	       // Constant time Θ(1) 
@@ -88,6 +88,7 @@ Problem 3:
 	   // Constant time Θ(1) 
 	   a[i] = sqrt(i);
 	}
+	Total runs: n*n/10 + 1*n*9/10 -> n^2 prevails
 	Runtime: Θ(n^2)
 
 	Part (d):
@@ -96,12 +97,14 @@ Problem 3:
 	int size = 10;
 	for (int i = 0; i < n; i ++) 
 	{
+	   // If statement runs log(n) times
 	   if (i == size)
 	   {  
 	       // Constant time Θ(1)
 	       int newsize = 2*size;
 	       int *b = new int [newsize];
-	       
+	       // Worst case this will run linearly Θ(n) when
+	       // size gets close to n
 	       for (int j = 0; j < size; j ++) b[j] = a[j];
 	       // Constant time Θ(1)
 	       delete [] a;
@@ -111,3 +114,67 @@ Problem 3:
 	   // Constant time Θ(1)
 	   a[i] = sqrt(i);
 	}
+	Total runs: n*log(n) + 1*(n-log(n)) -> n*log(n) prevails
+	Runtime: Runtime: Θ(n*log(n))
+
+Problem 4:
+	1. a data type that stores all of the past and present presidents 
+	of the U.S., and the order in which they served.
+		A stack of strings. The previous presidents would be pushed to the 
+		stack from president 1 to 44 and stored in order. Any new president 
+		would be pushed to the top of the stack in constant time.
+	2. a data type that stores population estimates for each zip code, 
+	and allows for speedy access of the population when given a zip code.
+		A map (key, value) where the key is the integer zip code that could 
+		be used as the input parameter to a function that looks up and
+		returns an integer for the population.
+	3. a data type that stores all of the students that solved a tricky 
+	homework problem in CSCI 170.
+		A set of strings. Order doesn't matter in a set, and values can't be
+		repeated because there cannot be two of the same student. New strings 
+		could be easily added to the set, with no means to lookup anything
+		because it's just for storage. 
+	4. a data type that stores a gradebook: given a student ID and 
+	assignment number, it lets you easily check the student's numeric 
+	grade for that assignment.
+		A map with two keys (key, key2, value). The two keys are integers, one
+		is the student ID and the other is the assignment number. Both keys
+		will be used to look up a value that will an integer for that
+		student's grade for that assignment.
+
+Problem 5:
+	Input: 1 -> 2 -> 3 -> 4 -> 5
+	
+	Sequence of function calls from first to last 
+	(and changes made to linked list along the way):
+	
+	funcA(1)
+		funcA(2)
+			funcA(3)
+				funcA(4)
+					funcA(5)
+						return 5
+					funcB(4,5)
+						1 -> 2 -> 3 -> 4 -><- 5
+					1 -> 2 -> 3 -> 4 <- 5
+					return 5
+				funcB(3,5)
+					funcB(3,4)
+						1 -> 2 -> 3 -><- 4 <- 5
+				1 -> 2 -> 3 <- 4 <- 5
+				return 5
+			funcB(2,5)
+				funcB(2,4)
+					funcB(2,3)
+						1 -> 2 -><- 3 <- 4 <- 5
+			1 -> 2 <- 3 <- 4 <- 5
+			return 5
+		funcB(1,5)
+			funcB(1,4)
+				funcB(1,3)
+					funcB(1,2)
+						1 -><- 2 <- 3 <- 4 <- 5
+		1 <- 2 <- 3 <- 4 <- 5
+		return 5
+
+	Output: 5 -> 4 -> 3 -> 2 -> 1
