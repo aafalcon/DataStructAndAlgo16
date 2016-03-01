@@ -7,6 +7,7 @@
 #include <sstream> 
 #include <fstream>
 #include <cstdlib>
+#include <iostream>
 
 
 using namespace std;
@@ -85,17 +86,20 @@ Statement * parseLine(string line)
 }
 
 
-void interpretProgram(istream& inf, ostream& outf);
+void interpretProgram(istream& inf, ostream& outf)
 {
 	vector<Statement *> program;
 	parseProgram( inf, program );
 	int numLines= program.size();
 	ProgramState* state = new ProgramState(numLines);
 
-	for (int i=0; i<numLines; i++)
+	for (int i=1; i<numLines; i++)
 	{
 		program[i]->execute(state, cout);
 	}
+
+	cout << state->getNumLines() << endl;
+	cout << state->getCounter() << endl;
 	
 	// Incomplete;  TODO:  Finish this function!
 }

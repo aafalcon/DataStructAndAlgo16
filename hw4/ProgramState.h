@@ -23,6 +23,8 @@
 
 //#include "stackint.h"
 #include <stack>
+#include <map>
+#include <string>
 
 class ProgramState
 {
@@ -31,6 +33,7 @@ public:
 	void addVar(std::string varName, int varVal);
 	void counterNext();
 	int getNumLines();
+	int getCounter();
 
 	// You'll need to add a variety of methods here.  Rather than trying to
 	// think of what you'll need to add ahead of time, add them as you find
@@ -40,8 +43,8 @@ public:
 private:
 	int m_numLines;
 	int counter;
-	map<std::string, int> varList;
-	stack <int> rtrnLines;
+	std::map<std::string, int> varList;
+	std::stack<int> rtrnLines;
 };
 
 #endif

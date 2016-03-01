@@ -3,6 +3,7 @@ using namespace std;
 
 ProgramState::ProgramState(int numLines) {
 	m_numLines= numLines;
+	counter= 0;
 }
 
 void ProgramState::addVar(string varName, int varVal) {
@@ -15,4 +16,8 @@ void ProgramState::counterNext() {
 
 int ProgramState::getNumLines() {
 	return m_numLines;
+}
+
+int ProgramState::getCounter() {
+	return counter;
 }
