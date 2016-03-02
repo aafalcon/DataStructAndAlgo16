@@ -25,15 +25,22 @@
 #include <stack>
 #include <map>
 #include <string>
+#include <vector>
 
 class ProgramState
 {
 public:
 	ProgramState(int numLines);
 	void addVar(std::string varName, int varVal);
+	void modifyVar(std::string varName, int varVal);
+	void reachEnd();
+	bool varExists(std::string varName);
 	void counterNext();
 	int getNumLines();
 	int getCounter();
+	int printVar(std::string varName);
+	std::vector<std::string> printAll();
+	bool getEndReached();
 
 	// You'll need to add a variety of methods here.  Rather than trying to
 	// think of what you'll need to add ahead of time, add them as you find
@@ -43,8 +50,10 @@ public:
 private:
 	int m_numLines;
 	int counter;
-	std::map<std::string, int> varList;
+	std::map<std::string, int> varMap;
+	std::map<std::string, int>::iterator it;
 	std::stack<int> rtrnLines;
+	bool endReached;
 };
 
 #endif

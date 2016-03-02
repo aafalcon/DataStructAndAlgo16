@@ -2,7 +2,7 @@
 #include "LetStatement.h"
 using namespace std;
 
-LetStatement::LetStatement(std::string variableName, int value)
+LetStatement::LetStatement(string variableName, int value)
 	: m_variableName( variableName ), m_value( value )
 {}
 
@@ -14,8 +14,17 @@ LetStatement::LetStatement(std::string variableName, int value)
 //    * increment the program counter
 void LetStatement::execute(ProgramState * state, ostream &outf)
 {
-	// set value
-	state->addVar(m_variableName, m_value);
+	// check if variable is already in map
+	if (state->varExists(m_variableName))
+	{
+		// if so change value of existing variable
+		state->modifyVar(m_variableName, m_value);
+	}
+	else
+	{
+		// or add new variable
+		state->addVar(m_variableName, m_value);
+	}
 	// increment program counter
 	state->counterNext();
 }

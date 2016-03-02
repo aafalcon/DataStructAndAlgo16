@@ -2,6 +2,9 @@
 #include "Statement.h"
 #include "ProgramState.h"
 #include "LetStatement.h"
+#include "PrintStatement.h"
+#include "PrintallStatement.h"
+#include "EndStatement.h"
 #include <vector>
 #include <string>
 #include <sstream> 
@@ -70,12 +73,33 @@ Statement * parseLine(string line)
 	if ( type == "LET" )
 	{
 		ss >> var;
-		ss >> val;
+		
+		// if no specific value is set, make value 0
+		if(!(ss >> val))
+		{
+			val= 0;
+		}
 		// Note:  Because the project spec states that we can assume the file
 		//	  contains a syntactically legal Facile program, we know that
 		//	  any line that begins with "LET" will be followed by a space
 		//	  and then a variable and then an integer value.
 		statement = new LetStatement(var, val);
+	}
+
+	else if ( type == "PRINT" )
+	{
+		ss >> var;
+		statement = new PrintStatement(var);
+	}
+
+	else if ( type == "PRINTALL")
+	{
+		statement = new PrintallStatement();
+	}
+
+	else if ( (type == "END") || (type == ".") )
+	{
+		statement = new EndStatement();
 	}
 
 	// Incomplete;  TODO:  Finish this function!
@@ -92,14 +116,13 @@ void interpretProgram(istream& inf, ostream& outf)
 	parseProgram( inf, program );
 	int numLines= program.size();
 	ProgramState* state = new ProgramState(numLines);
+	int i;
 
-	for (int i=1; i<numLines; i++)
+	while (!(state->getEndReached()))
 	{
-		program[i]->execute(state, cout);
+		i = state->getCounter();
+		program[i+1]->execute(state, outf);
 	}
-
-	cout << state->getNumLines() << endl;
-	cout << state->getCounter() << endl;
 	
 	// Incomplete;  TODO:  Finish this function!
 }
