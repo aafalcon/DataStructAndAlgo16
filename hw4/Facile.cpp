@@ -5,6 +5,10 @@
 #include "PrintStatement.h"
 #include "PrintallStatement.h"
 #include "EndStatement.h"
+#include "AddStatement.h"
+#include "SubStatement.h"
+#include "MultStatement.h"
+#include "DivStatement.h"
 #include <vector>
 #include <string>
 #include <sstream> 
@@ -64,7 +68,7 @@ Statement * parseLine(string line)
 	Statement * statement;	
 	stringstream ss;
 	string type;
-	string var;
+	string var, var2;
 	int val;
 
 	ss << line;
@@ -102,6 +106,81 @@ Statement * parseLine(string line)
 		statement = new EndStatement();
 	}
 
+	else if ( type == "ADD" )
+	{
+		ss >> var;
+		ss >> var2;
+
+		// check if var2 is an integer
+		if (isdigit(var2[0]))
+		{
+			// change string to int
+			val = atoi(var2.c_str());
+			statement = new AddStatement(var, val);
+		}
+		// otherwise, var2 is a variable name and must call other constructor
+		else
+		{
+			statement = new AddStatement(var, var2);
+		}
+	}
+
+	else if ( type == "SUB" )
+	{
+		ss >> var;
+		ss >> var2;
+
+		// check if var2 is an integer
+		if (isdigit(var2[0]))
+		{
+			// change string to int
+			val = atoi(var2.c_str());
+			statement = new SubStatement(var, val);
+		}
+		// otherwise, var2 is a variable name and must call other constructor
+		else
+		{
+			statement = new SubStatement(var, var2);
+		}
+	}
+
+	else if ( type == "MULT" )
+	{
+		ss >> var;
+		ss >> var2;
+
+		// check if var2 is an integer
+		if (isdigit(var2[0]))
+		{
+			// change string to int
+			val = atoi(var2.c_str());
+			statement = new MultStatement(var, val);
+		}
+		// otherwise, var2 is a variable name and must call other constructor
+		else
+		{
+			statement = new MultStatement(var, var2);
+		}
+	}
+
+	else if ( type == "DIV" )
+	{
+		ss >> var;
+		ss >> var2;
+
+		// check if var2 is an integer
+		if (isdigit(var2[0]))
+		{
+			// change string to int
+			val = atoi(var2.c_str());
+			statement = new DivStatement(var, val);
+		}
+		// otherwise, var2 is a variable name and must call other constructor
+		else
+		{
+			statement = new DivStatement(var, var2);
+		}
+	}
 	// Incomplete;  TODO:  Finish this function!
 
 

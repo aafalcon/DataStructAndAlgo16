@@ -47,20 +47,13 @@ int ProgramState::printVar(string varName) {
 	return varMap[varName];
 }
 
-vector<string> ProgramState::printAll() {
-	vector<string> varList;
-	string varPair;
+void ProgramState::printAll(ostream &outf) {
 	// iterate through map
 	for(it = varMap.begin(); it != varMap.end(); ++it)   
 	{
 	    // create line with variable name and value
-	    varPair = it->first;
-	    varPair += " ";
-	    varPair += it->second;
-	    // push line into vector
-	    varList.push_back(varPair);
+	    outf << it->first << " " << it->second << endl;
 	}
-	return varList;
 }
 
 bool ProgramState::getEndReached() {

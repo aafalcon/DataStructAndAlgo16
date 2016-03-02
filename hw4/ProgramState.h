@@ -26,6 +26,8 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <fstream>
 
 class ProgramState
 {
@@ -39,7 +41,7 @@ public:
 	int getNumLines();
 	int getCounter();
 	int printVar(std::string varName);
-	std::vector<std::string> printAll();
+	void printAll(std::ostream &outf);
 	bool getEndReached();
 
 	// You'll need to add a variety of methods here.  Rather than trying to
