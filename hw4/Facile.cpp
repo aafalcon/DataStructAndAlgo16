@@ -9,6 +9,8 @@
 #include "SubStatement.h"
 #include "MultStatement.h"
 #include "DivStatement.h"
+#include "GotoStatement.h"
+#include "IfStatement.h"
 #include <vector>
 #include <string>
 #include <sstream> 
@@ -68,8 +70,8 @@ Statement * parseLine(string line)
 	Statement * statement;	
 	stringstream ss;
 	string type;
-	string var, var2;
-	int val;
+	string var, var2, oper, dummy;
+	int val, lineNum;
 
 	ss << line;
 	ss >> type;
@@ -181,8 +183,24 @@ Statement * parseLine(string line)
 			statement = new DivStatement(var, var2);
 		}
 	}
-	// Incomplete;  TODO:  Finish this function!
+	
+	else if ( type == "GOTO" )
+	{
+		ss >> lineNum;
+		statement = new GotoStatement(lineNum);
+	}
 
+	else if ( type == "IF")
+	{
+		ss >> var; // variable to compare
+		ss >> oper; // comparison operator
+		ss >> val; // interger value to compare to
+		ss >> dummy; // THEN staement
+		ss >> lineNum; // line to jump to
+
+		statement = new IfStatement(var, oper, val, lineNum);
+	}
+	// Incomplete;  TODO:  Finish this function!
 
 		
 	return statement;
@@ -193,7 +211,7 @@ void interpretProgram(istream& inf, ostream& outf)
 {
 	vector<Statement *> program;
 	parseProgram( inf, program );
-	int numLines= program.size();
+	int numLines= program.size() - 1;
 	ProgramState* state = new ProgramState(numLines);
 	int i;
 

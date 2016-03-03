@@ -35,6 +35,11 @@ void ProgramState::counterNext() {
 	counter++;
 }
 
+void ProgramState::counterJump(int line) {
+	// counter is one behind line number
+	counter = line-1;
+}
+
 int ProgramState::getNumLines() {
 	return m_numLines;
 }

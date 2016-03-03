@@ -6,7 +6,8 @@ all: $(BIN_DIR)/.dirstamp Facile
 
 Facile: $(BIN_DIR)/ProgramState.o $(BIN_DIR)/LetStatement.o $(BIN_DIR)/PrintStatement.o \
 $(BIN_DIR)/PrintallStatement.o $(BIN_DIR)/EndStatement.o $(BIN_DIR)/AddStatement.o \
-$(BIN_DIR)/SubStatement.o $(BIN_DIR)/MultStatement.o $(BIN_DIR)/DivStatement.o Facile.cpp
+$(BIN_DIR)/SubStatement.o $(BIN_DIR)/MultStatement.o $(BIN_DIR)/DivStatement.o \
+$(BIN_DIR)/GotoStatement.o $(BIN_DIR)/IfStatement.o Facile.cpp
 	$(CXX) $(CPPFLAGS) $^ -o $@
 
 $(BIN_DIR)/ProgramState.o: ProgramState.cpp ProgramState.h
@@ -35,6 +36,12 @@ $(BIN_DIR)/MultStatement.o: Statement.h MultStatement.cpp MultStatement.h
 
 $(BIN_DIR)/DivStatement.o: Statement.h DivStatement.cpp DivStatement.h
 	$(CXX) $(CPPFLAGS) -c DivStatement.cpp -o $@
+
+$(BIN_DIR)/GotoStatement.o: Statement.h GotoStatement.cpp GotoStatement.h
+	$(CXX) $(CPPFLAGS) -c GotoStatement.cpp -o $@
+
+$(BIN_DIR)/IfStatement.o: Statement.h IfStatement.cpp IfStatement.h
+	$(CXX) $(CPPFLAGS) -c IfStatement.cpp -o $@
 
 .PHONY: all clean
 

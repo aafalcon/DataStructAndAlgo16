@@ -38,6 +38,7 @@ public:
 	void reachEnd();
 	bool varExists(std::string varName);
 	void counterNext();
+	void counterJump(int line);
 	int getNumLines();
 	int getCounter();
 	int printVar(std::string varName);
