@@ -8,3 +8,4 @@ To compile facile, enter into terminal:
 	make
 To run facile, enter into terminal:
 	./Facile
+Input files have extension .in
