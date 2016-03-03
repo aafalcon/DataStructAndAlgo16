@@ -27,6 +27,7 @@ class Statement
 	// a RETURN statement without a corresponding GOSUB, the program may exit
 	// instead of returning from execute().
 public:
+	virtual ~Statement() {}
 	virtual void execute(ProgramState*  state, std::ostream &outf) = 0;
 };
 

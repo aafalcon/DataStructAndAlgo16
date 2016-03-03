@@ -232,6 +232,11 @@ void interpretProgram(istream& inf, ostream& outf)
 		program[i+1]->execute(state, outf);
 	}
 	
-	// Incomplete;  TODO:  Finish this function!
+	// Deallocate memory
+	for (int i=0; i<=numLines; ++i)
+	{
+		delete program[i];
+	}
+	delete state;
 }
 
