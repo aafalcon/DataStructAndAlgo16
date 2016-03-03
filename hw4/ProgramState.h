@@ -44,6 +44,9 @@ public:
 	int printVar(std::string varName);
 	void printAll(std::ostream &outf);
 	bool getEndReached();
+	void addReturn(int line);
+	int getReturn();
+	bool retStackEmpty();
 
 	// You'll need to add a variety of methods here.  Rather than trying to
 	// think of what you'll need to add ahead of time, add them as you find

@@ -11,6 +11,8 @@
 #include "DivStatement.h"
 #include "GotoStatement.h"
 #include "IfStatement.h"
+#include "GosubStatement.h"
+#include "ReturnStatement.h"
 #include <vector>
 #include <string>
 #include <sstream> 
@@ -200,9 +202,18 @@ Statement * parseLine(string line)
 
 		statement = new IfStatement(var, oper, val, lineNum);
 	}
-	// Incomplete;  TODO:  Finish this function!
 
-		
+	else if ( type == "GOSUB")
+	{
+		ss >> lineNum;
+		statement = new GosubStatement(lineNum);
+	}
+
+	else if ( type == "RETURN" )
+	{
+		statement = new ReturnStatement();
+	}
+	
 	return statement;
 }
 

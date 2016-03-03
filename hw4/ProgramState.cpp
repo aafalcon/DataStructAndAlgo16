@@ -64,3 +64,17 @@ void ProgramState::printAll(ostream &outf) {
 bool ProgramState::getEndReached() {
 	return endReached;
 }
+
+void ProgramState::addReturn(int line) {
+	rtrnLines.push(line);
+}
+
+int ProgramState::getReturn() {
+	int line = rtrnLines.top();
+	rtrnLines.pop();
+	return line;
+}
+
+bool ProgramState::retStackEmpty() {
+	return rtrnLines.empty();
+}
