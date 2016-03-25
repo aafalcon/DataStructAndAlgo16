@@ -11,6 +11,13 @@
 #include <QComboBox>
 
 #include <string>
+#include <vector>
+#include <sstream> 
+#include <fstream>
+#include <cstdlib>
+#include <iostream>
+
+#include "Facile.h"
 
 class Multiwin : public QWidget
 {
@@ -47,5 +54,7 @@ private:
   QPushButton* hideButton;
   QPushButton* updateButton;
   QComboBox* sortBox;
+
+  Facile* facile;
 };
 #endif

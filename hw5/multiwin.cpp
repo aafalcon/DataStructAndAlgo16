@@ -1,5 +1,7 @@
 #include "multiwin.h"
 
+using namespace std;
+
 Multiwin::Multiwin() : QWidget(NULL)
 {
   // LOAD WINDOW
@@ -93,11 +95,44 @@ Multiwin::~Multiwin() {
 
 void Multiwin::loadButtonClicked()
 {
+  codeLines->clear();
+  // Do nothing if user left at least one input blank
+  if(textInput->text().isEmpty())
+  {
+    return;
+  }
+
+  string filename;
+  filename = textInput->text().toStdString();
+  ifstream infile(filename.c_str());
+  if (!infile)
+  {
+    cout << "Cannot open " << filename << "!" << endl;
+    return;
+  }
+
+  facile = new Facile(infile);
+  facile->executeProgram(cout);
+  
+  int size = facile->getNumLines();
+
+  for (int i=0; i<size; ++i) {
+    codeLines->addItem(QString::fromStdString(facile->getLine(i)));
+  }
+
+  // Clear the form inputs
+  textInput->setText("");
+  
   debugWin->show();
 }
 
 void Multiwin::inspectButtonClicked()
 {
+  varLines->clear();
+  int size = facile->getNumVar();
+  for (int i=0; i<size; ++i) {
+    varLines->addItem(QString::fromStdString(facile->printIndex(i)));
+  }
   valueWin->show();
 }
 
