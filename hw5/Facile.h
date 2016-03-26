@@ -27,7 +27,8 @@ class Facile {
 private:
 	std::vector<std::string> codeLines;
 	std::vector<Statement *> program;
-	int numLines;
+	bool* breakpoints;
+	int numLines, currLine;
 	ProgramState* state;
 public:
 	Facile(std::istream& inf);
@@ -45,10 +46,13 @@ public:
 	// and interprets it, writing any output to the given output stream.
 	// Note:  you are required to implement this function!
 	void executeProgram(std::ostream& outf);
+	void executeLine(std::ostream& outf);
 	std::string getLine(int lineNum);
 	int getNumLines();
 	std::string printIndex(int varIndex);
 	int getNumVar();
+	void addBreakpoint(int lineNum);
+	bool breakExist(int lineNum);
 };
 
 

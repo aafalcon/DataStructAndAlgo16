@@ -34,8 +34,14 @@ int main()
 */
 Facile::Facile(istream& inf) {
 	parseProgram( inf, program );
-	int numLines= program.size() - 1;
+	numLines= program.size() - 1;
+	breakpoints = new bool[numLines];
+	for (int i=0; i<numLines; ++i)
+	{
+		*(breakpoints+i) = false;
+	}
 	state = new ProgramState(numLines);
+	currLine = 0;
 }
 
 Facile::~Facile() {
@@ -215,11 +221,32 @@ Statement * Facile::parseLine(string line)
 
 void Facile::executeProgram(ostream& outf)
 {
-	int i;
-	while (!(state->getEndReached()))
+	while (!(state->getEndReached()) && !(this->breakExist(currLine)))
 	{
-		i = state->getCounter();
-		program[i+1]->execute(state, outf);
+		program[currLine+1]->execute(state, outf);
+		currLine = state->getCounter();
+	}
+
+	// Reset program to beginning when end is reached
+	if (state->getEndReached())
+	{
+		currLine = 0;
+		state->restart();
+		state->clearMap();
+	}
+}
+
+void Facile::executeLine(ostream& outf)
+{
+	program[currLine+1]->execute(state, outf);
+	currLine = state->getCounter();
+
+	// Reset program to beginning when end is reached
+	if (state->getEndReached())
+	{
+		currLine = 0;
+		state->restart();
+		state->clearMap();
 	}
 }
 
@@ -241,3 +268,17 @@ int Facile::getNumVar() {
 	return state->getNumVar1();
 }
 
+void Facile::addBreakpoint(int lineNum) {
+	if (*(breakpoints+lineNum) == false)
+	{
+		*(breakpoints+lineNum) = true;
+	}
+	else
+	{
+		*(breakpoints+lineNum) = false;
+	}
+}
+
+bool Facile::breakExist(int lineNum) {
+	return *(breakpoints+lineNum);
+}

@@ -30,8 +30,14 @@ public slots:
   void inspectButtonClicked();
   void closeButtonClicked();
   void hideButtonClicked();
+  void quitButtonClicked();
+  void quitButton2Clicked();
+  void breakButtonClicked();
+  void contButtonClicked();
+  void stepButtonClicked();
+  void updateButtonClicked();
 private:
-  QGridLayout* layout;
+  QGridLayout* loadLayout;
   QLabel* textPrompt;
   QLineEdit* textInput;
   QPushButton* loadButton;
@@ -45,7 +51,7 @@ private:
   QPushButton* stepButton;
   QPushButton* nextButton;
   QPushButton* inspectButton;
-  QPushButton* closeButton;
+  QPushButton* quitButton2;
 
   QWidget* valueWin;
   QGridLayout* valueLayout;

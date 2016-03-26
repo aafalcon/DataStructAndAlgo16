@@ -15,8 +15,17 @@ void ProgramState::modifyVar(std::string varName, int varVal) {
 	varMap[varName] = varVal;
 }
 
+void ProgramState::clearMap() {
+	varMap.clear();
+}
+
 void ProgramState::reachEnd() {
 	endReached = true;
+}
+
+void ProgramState::restart() {
+	endReached = false;
+	counter= 0;
 }
 
 bool ProgramState::varExists(string varName) {

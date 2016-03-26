@@ -5,22 +5,26 @@ using namespace std;
 Multiwin::Multiwin() : QWidget(NULL)
 {
   // LOAD WINDOW
-  setWindowTitle("Load Window");
-  layout = new QGridLayout();
+  loadLayout = new QGridLayout();
   // Allocate widgets
   textPrompt = new QLabel("Enter Filename:");
   textInput = new QLineEdit();
   loadButton = new QPushButton("Load");
   quitButton = new QPushButton("Quit");
   // Add widgets to layout
-  layout->addWidget(textPrompt, 0, 0, 1, 2);
-  layout->addWidget(textInput, 1, 0, 1, 2);
-  layout->addWidget(loadButton, 1, 2, 1, 1);
-  layout->addWidget(quitButton, 3, 1, 1, 1);
-  setLayout(layout);
+  loadLayout->addWidget(textPrompt, 0, 0, 1, 2);
+  loadLayout->addWidget(textInput, 1, 0, 1, 2);
+  loadLayout->addWidget(loadButton, 1, 2, 1, 1);
+  loadLayout->addWidget(quitButton, 3, 1, 1, 1);
+  setWindowTitle("Load Window");
+  setLayout(loadLayout);
   // Connect slots
   QObject::connect(loadButton, SIGNAL(clicked()), this, SLOT(loadButtonClicked()
   ));
+  QObject::connect(textInput, SIGNAL(returnPressed()), this, SLOT(loadButtonClicked()
+  ));
+  QObject::connect(quitButton, SIGNAL(clicked()), this, SLOT(quitButtonClicked
+  ()));
 
   // DEBUG WINDOW
   debugLayout = new QGridLayout();
@@ -32,7 +36,7 @@ Multiwin::Multiwin() : QWidget(NULL)
   stepButton = new QPushButton("Step");
   nextButton = new QPushButton("Next");
   inspectButton = new QPushButton("Inspect");
-  closeButton = new QPushButton("Close");
+  quitButton2 = new QPushButton("Quit");
   // Add widgets to layout
   debugLayout->addWidget(codeLines, 0, 0, 5, 3);
   debugLayout->addWidget(breakButton, 0, 3, 1, 1);
@@ -40,13 +44,19 @@ Multiwin::Multiwin() : QWidget(NULL)
   debugLayout->addWidget(stepButton, 2, 3, 1, 1);
   debugLayout->addWidget(nextButton, 3, 3, 1, 1);
   debugLayout->addWidget(inspectButton, 4, 3, 1, 1);
-  debugLayout->addWidget(closeButton, 5, 1, 1, 1);
+  debugLayout->addWidget(quitButton2, 5, 1, 1, 1);
   debugWin->setWindowTitle("Debugger Window");
   debugWin->setLayout(debugLayout);
   // Connect slots
+  QObject::connect(breakButton, SIGNAL(clicked()), this, SLOT(breakButtonClicked
+  ()));
+  QObject::connect(contButton, SIGNAL(clicked()), this, SLOT(contButtonClicked
+  ()));
+  QObject::connect(stepButton, SIGNAL(clicked()), this, SLOT(stepButtonClicked
+  ()));
   QObject::connect(inspectButton, SIGNAL(clicked()), this, SLOT(inspectButtonClicked
   ()));
-  QObject::connect(closeButton, SIGNAL(clicked()), this, SLOT(closeButtonClicked
+  QObject::connect(quitButton2, SIGNAL(clicked()), this, SLOT(quitButton2Clicked
   ()));
 
   // VALUES WINDOW
@@ -71,26 +81,38 @@ Multiwin::Multiwin() : QWidget(NULL)
   valueWin->setWindowTitle("Values Window");
   valueWin->setLayout(valueLayout);
   // Connect slots
+  QObject::connect(updateButton, SIGNAL(clicked()), this, SLOT(updateButtonClicked
+  ()));
   QObject::connect(hideButton, SIGNAL(clicked()), this, SLOT(hideButtonClicked
   ()));
-
-
-
 }
 
 Multiwin::~Multiwin() {
+  // LOAD Window
+  delete loadLayout;
   delete textPrompt;
   delete textInput;
   delete loadButton;
   delete quitButton;
+  // DEBUG Window
   delete debugWin;
   delete debugLayout;
+  delete codeLines;
+  delete breakButton;
+  delete contButton;
+  delete stepButton;
+  delete nextButton;
   delete inspectButton;
-  delete closeButton;
+  delete quitButton2;
+  // VALUES Window
   delete valueWin;
   delete valueLayout;
+  delete sortBox;
+  delete varLines;
   delete hideButton;
-  delete layout;
+  delete updateButton;
+
+  delete facile;
 }
 
 void Multiwin::loadButtonClicked()
@@ -112,7 +134,6 @@ void Multiwin::loadButtonClicked()
   }
 
   facile = new Facile(infile);
-  facile->executeProgram(cout);
   
   int size = facile->getNumLines();
 
@@ -122,8 +143,40 @@ void Multiwin::loadButtonClicked()
 
   // Clear the form inputs
   textInput->setText("");
-  
+  this->hide();
   debugWin->show();
+}
+
+void Multiwin::quitButtonClicked()
+{
+  exit(EXIT_SUCCESS);
+}
+
+void Multiwin::breakButtonClicked()
+{
+  // either adds a new breakpoint or removes existing breakpoint
+  facile->addBreakpoint(codeLines->currentRow());
+  if (facile->breakExist(codeLines->currentRow()))
+  {
+    // if breakpoint added make color red
+    codeLines->item(codeLines->currentRow())->setBackground(Qt::red);
+  }
+  else
+  {
+    // if breakpoint removed change back to white
+    codeLines->item(codeLines->currentRow())->setBackground(Qt::white);
+  }
+  
+}
+
+void Multiwin::contButtonClicked()
+{
+  facile->executeProgram(cout);
+}
+
+void Multiwin::stepButtonClicked()
+{
+  facile->executeLine(cout);
 }
 
 void Multiwin::inspectButtonClicked()
@@ -136,9 +189,23 @@ void Multiwin::inspectButtonClicked()
   valueWin->show();
 }
 
+void Multiwin::quitButton2Clicked()
+{
+  exit(EXIT_SUCCESS);
+}
+
 void Multiwin::closeButtonClicked()
 {
   debugWin->hide();
+}
+
+void Multiwin::updateButtonClicked()
+{
+  varLines->clear();
+  int size = facile->getNumVar();
+  for (int i=0; i<size; ++i) {
+    varLines->addItem(QString::fromStdString(facile->printIndex(i)));
+  }
 }
 
 void Multiwin::hideButtonClicked()

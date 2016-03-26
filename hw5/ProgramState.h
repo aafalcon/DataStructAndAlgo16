@@ -36,7 +36,9 @@ public:
 	ProgramState(int numLines);
 	void addVar(std::string varName, int varVal);
 	void modifyVar(std::string varName, int varVal);
+	void clearMap();
 	void reachEnd();
+	void restart();
 	bool varExists(std::string varName);
 	void counterNext();
 	void counterJump(int line);
