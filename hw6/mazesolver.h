@@ -3,6 +3,8 @@
 
 
 #include "visitedtracker.h"
+#include "maze.h"
+#include "heap.h"
 
 /*
  * I didn't want the students to have to deal
@@ -36,6 +38,9 @@ public:
 private:
 
     int squareNumber(int r, int c) const;
+
+    bool DFSRecursiveHelper(std::pair<int,int> cell, 
+    	std::vector<Direction> &parent, VisitedTracker &vt, int &nExp ); 
 
     Maze * maze;
     MazeDisplay * display;
