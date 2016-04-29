@@ -1,5 +1,10 @@
+#ifndef HASH_H
+#define HASH_H
+
 #include "Map.h"
 #include <string>
+#include <cstdlib>
+#include <vector>
 
 class Hash : public Map {
 public:
@@ -17,15 +22,21 @@ public:
 	/* This takes a string as input, and outputs a pseudo-random index 
 	to store it at. More detail on how to write this hash function is 
 	provided below. */
-	int hash(std::string word);
+	int hashWord(std::string word);
 private:
 	/* A private helper function which approximately doubles the number 
 	of buckets available. You should call this when your load factor exceeds 0.5. 
 	The # of buckets should follow this sequence: 11, 23, 41, 83, 163, 331, 641, 
 	1283, 2579, 5147, 10243, 20483, 40961. */
 	void resize();
+	// finds a new hash value for all words to place into resized hash table
+	void rehash();
 
 	double loadFactor;
 	int buckets;
+	int items;
+	std::vector<std::pair<std::string, int>* > hashTable;
 };
+
+#endif
 
