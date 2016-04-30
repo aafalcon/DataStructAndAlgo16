@@ -9,11 +9,11 @@ Hash::Hash() {
 	loadFactor = 0;
 	items = 0;
 	buckets = 11;
-	hashTable.reserve(11, NULL);
+	hashTable.resize(11, NULL);
 }
 
 Hash::~Hash() {
-	for (vector<pair<string,int> >::iterator it = hashTable.begin(); 
+	for (vector<pair<string,int>* >::iterator it = hashTable.begin(); 
 		it != hashTable.end(); ++it)
 	   {
 	     delete *it;
@@ -23,8 +23,8 @@ Hash::~Hash() {
 
 void Hash::add(const string& word) {
 	// change uppercase characters to lowercase
-	std::string word1 = word; // copy word to edit
-	for (int i=0; i < word1.length(); ++i)
+	string word1 = word; // copy word to edit
+	for (size_t i=0; i < word1.length(); ++i)
 	{
 		// get ASCII value of character
 		int letter = (int)word1[i];
@@ -45,18 +45,18 @@ void Hash::add(const string& word) {
 		if (hashTable[hashWord(word1)+i] == NULL)
 		{
 			// place new word into empty spot
-			pair<string, int> value = make_pair(word1, 1)
-			*hashTable[hashWord(word1)+i] = value;
+			pair<string, int>* value = new pair<string, int>(word1, 1);
+			hashTable[hashWord(word1)+i] = value;
 			foundEmpty = true;
 			items++;
 		}
 		else
 		{
 			// If spot isn't empty, check if it is same word
-			if ((*hashTable[hashWord(word1)+i]).first == word1)
+			if (hashTable[hashWord(word1)+i]->first == word1)
 			{
-				wordCount = (*hashTable[hashWord(word1)+i]).second;
-				(*hashTable[hashWord(word1)+i]).second = wordCount + 1;
+				wordCount = hashTable[hashWord(word1)+i]->second;
+				hashTable[hashWord(word1)+i]->second = wordCount + 1;
 				foundEmpty = true;
 			}
 			else
@@ -71,17 +71,17 @@ void Hash::add(const string& word) {
 
 	if (loadFactor > 0.5)
 	{
-		resize();
+		rehash();
 	}
 }
 
 void Hash::reportAll(ostream& output) {
-	for (int i=0; i < hashTable.capacity(); ++i)
+	for (size_t i=0; i < hashTable.size(); ++i)
 	{
 		if (hashTable[i] != NULL)
 		{
-			output << (*hashTable[i]).first << " ";
-			output << (*hashTable[i]).second << endl;
+			output << hashTable[i]->first << " ";
+			output << hashTable[i]->second << endl;
 		}
 	}
 }
@@ -251,7 +251,7 @@ int Hash::hashWord(string word) {
 	return result;
 }
 
-void Hash::resize() {
+void Hash::reSize() {
 	if (buckets == 11)
 	{
 		buckets = 23;
@@ -298,11 +298,39 @@ void Hash::resize() {
 	}
 
 	loadFactor = items / buckets;
-	hashTable.reserve(buckets, NULL);
+	hashTable.clear();
+	hashTable.resize(buckets, NULL);
 }
 
-void Hash::rehash {
-	// Make a copy of the current hash table
-
-	// Resize current 
+void Hash::rehash() {
+	// Make a deep copy of the current hash table
+	vector<pair<string, int>* > copy(buckets, NULL);
+	pair<string, int> toCopy;
+	for (size_t i=0; i<hashTable.size(); ++i)
+	{
+		if (hashTable[i] != NULL)
+		{
+			toCopy = *hashTable[i];
+			*copy[i] = toCopy;
+		}
+	}
+	// Resize current hash table
+	reSize();
+	// Put all values in copy into hash function again
+	int newHash;
+	for (size_t i=0; i<copy.size(); ++i)
+	{
+		if (copy[i] != NULL)
+		{
+			newHash = hashWord(copy[i]->first);
+			*hashTable[newHash] = *copy[i];
+		}
+	}
+	// Delete copy
+	for (vector<pair<string,int>* >::iterator it = copy.begin(); 
+		it != copy.end(); ++it)
+    {
+      delete *it;
+    } 
+   	copy.clear();
 }
