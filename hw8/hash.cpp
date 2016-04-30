@@ -67,8 +67,7 @@ void Hash::add(const string& word) {
 		}
 	}
 
-	loadFactor = items / buckets;
-
+	loadFactor = (double)items / buckets;
 	if (loadFactor > 0.5)
 	{
 		rehash();
@@ -76,7 +75,7 @@ void Hash::add(const string& word) {
 }
 
 void Hash::reportAll(ostream& output) {
-	for (size_t i=0; i < hashTable.size(); ++i)
+	for (size_t i=0; i < hashTable.capacity(); ++i)
 	{
 		if (hashTable[i] != NULL)
 		{
@@ -272,6 +271,10 @@ void Hash::reSize() {
 	{
 		buckets = 331;
 	}
+	else if (buckets == 331)
+	{
+		buckets = 641;
+	}
 	else if (buckets == 641)
 	{
 		buckets = 1283;
@@ -297,7 +300,12 @@ void Hash::reSize() {
 		buckets = 40961;
 	}
 
-	loadFactor = items / buckets;
+	loadFactor = (double)items / buckets;
+	for (vector<pair<string,int>* >::iterator it = hashTable.begin(); 
+		it != hashTable.end(); ++it)
+    {
+      delete *it;
+    } 
 	hashTable.clear();
 	hashTable.resize(buckets, NULL);
 }
@@ -305,13 +313,13 @@ void Hash::reSize() {
 void Hash::rehash() {
 	// Make a deep copy of the current hash table
 	vector<pair<string, int>* > copy(buckets, NULL);
-	pair<string, int> toCopy;
+	pair<string, int>* toCopy;
 	for (size_t i=0; i<hashTable.size(); ++i)
 	{
 		if (hashTable[i] != NULL)
 		{
-			toCopy = *hashTable[i];
-			*copy[i] = toCopy;
+			toCopy = new pair<string, int>(*hashTable[i]);
+			copy[i] = toCopy;
 		}
 	}
 	// Resize current hash table
@@ -323,7 +331,7 @@ void Hash::rehash() {
 		if (copy[i] != NULL)
 		{
 			newHash = hashWord(copy[i]->first);
-			*hashTable[newHash] = *copy[i];
+			hashTable[newHash] = new pair<string, int>(*copy[i]);
 		}
 	}
 	// Delete copy

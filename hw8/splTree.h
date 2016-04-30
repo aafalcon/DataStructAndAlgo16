@@ -84,47 +84,9 @@ public:
 	}
 	void reportAll(std::ostream& output)
 	{
-		/*
-		for (BinarySearchTree<std::string,int>::iterator it = this->begin();
-			it != this->end(); ++it)
-		{
-			output << (*it).first << " " << (*it).second << std::endl;
-		}
-		*/
 		this->printRoot(this->root, output);
 		output << std::endl;
 	}
-	
-	/*
-	void check(std::ostream& output, int checkNum)
-	{
-		if (checkNum == 1)
-		{
-			if (this->root->getKey() == "Bravo" && this->root->getLeft()->getKey() == "Alpha" 
-				&& this->root->getRight()->getKey() == "Charlie")
-			{
-				output << "SUCCESS" << std::endl;
-			}
-			else
-			{
-				output << "FAILURE" << std::endl;
-			}
-		}
-		else if (checkNum == 2)
-		{
-			if (this->root->getKey() == "Alpha" && this->root->getRight()->getKey() == "Bravo" 
-				&& this->root->getRight()->getRight()->getKey() == "Charlie")
-			{
-				output << "SUCCESS" << std::endl;
-			}
-			else
-			{
-				output << "FAILURE" << std::endl;
-			}
-		}
-		
-	}
-	*/
 
 private:
 	void splay(Node<KeyType,ValueType>* x)

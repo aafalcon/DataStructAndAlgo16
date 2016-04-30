@@ -16,7 +16,29 @@ int main ()
 	h->add("superhero");
 	h->add("alden");
 	h->add("blue");
+
 	h->add("george");
+
+	h->add("the");
+	h->add("tragedy");
+	h->add("hamlet");
+	h->add("boy");
+	h->add("alpha");
+	h->add("bravo");
+
+	h->add("charlie");
+	h->add("delta");
+	h->add("echo");
+	h->add("epsilon");
+	h->add("foxtrot");
+	h->add("alden");
+	h->add("billie");
+	h->add("tony");
+	h->add("daredevil");
+	h->reportAll(cerr);
+	h->add("trainwreck");
+
+
 
 
 	h->reportAll(cerr);
