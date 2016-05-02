@@ -29,8 +29,10 @@ public:
 		}
 
 		Node<KeyType, ValueType>* curr = this->internalFind(word1);
+		//std::cerr << "TO ADD: " << word1 << std::endl << std::endl;
 		if (curr != NULL)
 		{
+			//std::cerr << "---FOUND!---" << std::endl;
 			curr->setValue(curr->getValue() + 1);
 			splay(curr);
 		}
@@ -49,8 +51,10 @@ public:
 		    // work down the tree until insertion location is found
 		    else
 		    {
+		      int i=0; //DEBUG
 		      while (toCompare != NULL)
 		      {
+		      	//std::cerr << "COMPARISON# " << i << std::endl; //DEBUG
 		        if (word1 > toCompare->getKey())
 		        {
 		          rightSide = true;
@@ -63,27 +67,36 @@ public:
 		          insertParent = toCompare;
 		          toCompare = toCompare->getLeft();
 		        }
+		        ++i; //DEBUG
 		      }
 		      // Insert to right of dead end
 		      if (rightSide)
 		      {
 		        insertParent->setRight(toInsert);
 		        toInsert->setParent(insertParent);
+		        //std::cerr << "***PLACED(RIGHT)" << std::endl; //DEBUG
 		      }
 		      // Insert to left of dead end
 		      else
 		      {
 		        insertParent->setLeft(toInsert);
 		        toInsert->setParent(insertParent);
+		        //std::cerr << "***PLACED(LEFT)" << std::endl; //DEBUG
 		      }
 			}
 
 			// splay inserted node
 			splay(toInsert);
 		}
+		/*
+		std::cerr << "Added: " << word1 << std::endl; //DEBUG
+		reportAll(std::cerr); //DEBUG
+		std::cerr << std::endl; //DEBUG
+		*/
 	}
 	void reportAll(std::ostream& output)
 	{
+		//std::cerr << "---Report---" << std::endl; //DEBUG
 		this->printRoot(this->root, output);
 		output << std::endl;
 	}
@@ -91,6 +104,7 @@ public:
 private:
 	void splay(Node<KeyType,ValueType>* x)
 	{
+		//std::cerr << "---SPLAY!---" << std::endl;
 		if (x->getParent() == NULL)
 		{
 			this->root = x;
@@ -109,11 +123,13 @@ private:
 					if (x->getKey() < p->getKey())
 					{
 						// LEFT
+						//std::cerr << "__RR__" << std::endl;
 						RR_rotation(x,p,g);
 					}
 					else
 					{
 						// RIGHT
+						//std::cerr << "__LR__" << std::endl;
 						LR_rotation(x,p,g);
 					}
 				}
@@ -123,11 +139,13 @@ private:
 					if (x->getKey() < p->getKey())
 					{
 						// LEFT
+						//std::cerr << "__RL__" << std::endl;
 						RL_rotation(x,p,g);
 					}
 					else
 					{
 						// RIGHT
+						//std::cerr << "__LL__" << std::endl;
 						LL_rotation(x,p,g);
 					}
 				}
@@ -138,11 +156,13 @@ private:
 				if (x->getKey() < p->getKey())
 				{
 					// LEFT
+					//std::cerr << "__R__" << std::endl;
 					R_rotation(x,p);
 				}
 				else
 				{
 					// RIGHT
+					//std::cerr << "__L__" << std::endl;
 					L_rotation(x,p);
 				}
 			}
@@ -160,6 +180,11 @@ private:
 		// alter y
 		y->setLeft(temp1);
 		y->setParent(x);
+		// alter temps
+		if (temp1 != NULL)
+		{
+			temp1->setParent(y);
+		}
 	}
 
 	void L_rotation(Node<KeyType,ValueType> *x, Node<KeyType,ValueType> *y)
@@ -171,6 +196,11 @@ private:
 		// alter y
 		y->setRight(temp1);
 		y->setParent(x);
+		// alter temps
+		if (temp1 != NULL)
+		{
+			temp1->setParent(y);
+		}
 	}
 
 	void RR_rotation(Node<KeyType,ValueType> *x, Node<KeyType,ValueType> *y,
@@ -188,6 +218,15 @@ private:
 		// alter z
 		z->setLeft(temp2);
 		z->setParent(y);
+		// alter temps
+		if (temp1 != NULL)
+		{
+			temp1->setParent(y);
+		}
+		if (temp2 != NULL)
+		{
+			temp2->setParent(z);
+		}
 	}
 
 	void LL_rotation(Node<KeyType,ValueType> *x, Node<KeyType,ValueType> *y,
@@ -205,6 +244,15 @@ private:
 		// alter z
 		z->setRight(temp2);
 		z->setParent(y);
+		// alter temps
+		if (temp1 != NULL)
+		{
+			temp1->setParent(y);
+		}
+		if (temp2 != NULL)
+		{
+			temp2->setParent(z);
+		}
 	}
 
 	void LR_rotation(Node<KeyType,ValueType> *x, Node<KeyType,ValueType> *y,
@@ -222,6 +270,15 @@ private:
 		// alter z
 		z->setLeft(temp2);
 		z->setParent(x);
+		// alter temps
+		if (temp1 != NULL)
+		{
+			temp1->setParent(y);
+		}
+		if (temp2 != NULL)
+		{
+			temp2->setParent(z);
+		}
 	}
 
 	void RL_rotation(Node<KeyType,ValueType> *x, Node<KeyType,ValueType> *y,
@@ -239,6 +296,16 @@ private:
 		// alter z
 		z->setRight(temp1);
 		z->setParent(x);
+		// alter temps
+		if (temp1 != NULL)
+		{
+			temp1->setParent(z);
+		}
+		if (temp2 != NULL)
+		{
+			temp2->setParent(y);
+
+		}
 	}
 };
 

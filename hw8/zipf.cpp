@@ -25,16 +25,21 @@ int main(int argc, char * argv[]) {
     {
     	wordBank = new SplayTree<string,int>();
     }
-    else
+    else if (algorithm == 5)
     {
     	wordBank = new Hash();
+    }
+    else
+    {
+    	cerr << "Choose (4) for Hash Table or (5) for Splay Tree" << endl;
+    	return 1;
     }
     while (!inFile.eof())
 	{
 		inFile >> currWord;
 		wordBank->add(currWord);
-		//wordBank->reportAll(cerr);
 	}
+	inFile.close();
 	wordBank->reportAll(cout);
 
 

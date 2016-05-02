@@ -283,7 +283,7 @@ class BinarySearchTree {
     if (r != NULL)
       {
       	printRoot (r->getLeft(), output);
-      	std::cout << r->getKey() << " " << r->getValue() << std::endl;
+      	output << r->getKey() << " " << r->getValue() << std::endl;
       	printRoot (r->getRight(), output);
       }
   }

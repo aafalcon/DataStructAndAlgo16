@@ -40,24 +40,45 @@ void Hash::add(const string& word) {
 	int wordCount;
 	int quadIter = 0;
 	int i = 0;
+	int newHash;
 	while (!foundEmpty)
 	{
-		if (hashTable[hashWord(word1)+i] == NULL)
+		newHash = (hashWord(word1)+i) % buckets;
+		if (hashTable[newHash] == NULL)
 		{
 			// place new word into empty spot
 			pair<string, int>* value = new pair<string, int>(word1, 1);
-			hashTable[hashWord(word1)+i] = value;
+			hashTable[newHash] = value;
 			foundEmpty = true;
 			items++;
+			/*
+			// DEBUG!!
+			cerr << "ADDED(NEW): " << value->first << " " << value->second << endl;
+			cerr << "TO HASH# " << newHash << endl;
+			cerr << "ITEMS: " << items << endl;
+			cerr << "BUCKETS: " << buckets << endl;
+			cerr << "LOADFACTOR: " << loadFactor << endl;
+			cerr << endl;
+			*/
 		}
 		else
 		{
 			// If spot isn't empty, check if it is same word
-			if (hashTable[hashWord(word1)+i]->first == word1)
+			if (hashTable[newHash]->first == word1)
 			{
-				wordCount = hashTable[hashWord(word1)+i]->second;
-				hashTable[hashWord(word1)+i]->second = wordCount + 1;
+				wordCount = hashTable[newHash]->second;
+				hashTable[newHash]->second = wordCount + 1;
 				foundEmpty = true;
+				/*
+				// DEBUG!!
+				cerr << "ADDED(EXIST): " << hashTable[newHash]->first;
+				cerr << " " << hashTable[newHash]->second << endl;
+				cerr << "TO HASH# " << newHash << endl;
+				cerr << "ITEMS: " << items << endl;
+				cerr << "BUCKETS: " << buckets << endl;
+				cerr << "LOADFACTOR: " << loadFactor << endl;
+				cerr << endl;
+				*/
 			}
 			else
 			{
@@ -75,7 +96,7 @@ void Hash::add(const string& word) {
 }
 
 void Hash::reportAll(ostream& output) {
-	for (size_t i=0; i < hashTable.capacity(); ++i)
+	for (size_t i=0; i < hashTable.size(); ++i)
 	{
 		if (hashTable[i] != NULL)
 		{
@@ -311,6 +332,9 @@ void Hash::reSize() {
 }
 
 void Hash::rehash() {
+	// DEBUG
+	//cerr << "---REHASH---" << endl << endl;
+
 	// Make a deep copy of the current hash table
 	vector<pair<string, int>* > copy(buckets, NULL);
 	pair<string, int>* toCopy;
@@ -324,14 +348,49 @@ void Hash::rehash() {
 	}
 	// Resize current hash table
 	reSize();
+	/*
+	// DEBUG
+	cerr << "RESIZED TO" << endl;
+	cerr << "ITEMS: " << items << endl;
+	cerr << "BUCKETS: " << buckets << endl;
+	cerr << "LOADFACTOR: " << loadFactor << endl;
+	cerr << endl;
+	*/
+
 	// Put all values in copy into hash function again
 	int newHash;
 	for (size_t i=0; i<copy.size(); ++i)
 	{
 		if (copy[i] != NULL)
 		{
-			newHash = hashWord(copy[i]->first);
-			hashTable[newHash] = new pair<string, int>(*copy[i]);
+			// handle collisions again
+			bool foundEmpty = false;
+			int quadIter = 0;
+			int j = 0;
+			while (!foundEmpty)
+			{
+				newHash = (hashWord(copy[i]->first)+j) % buckets; // hash value for new table
+				if (hashTable[newHash] == NULL)
+				{
+					// place new word into empty spot
+					hashTable[newHash] = new pair<string, int>(*copy[i]);
+					foundEmpty = true;
+				}
+				else
+				{
+					quadIter++;
+					j = pow(quadIter, 2);
+				}
+			}
+			/*
+			// DEBUG
+			cerr << "ADDED(REHASH): " << copy[i]->first << " " << copy[i]->second << endl;
+			cerr << "TO HASH# " << newHash << endl;
+			cerr << "ITEMS: " << items << endl;
+			cerr << "BUCKETS: " << buckets << endl;
+			cerr << "LOADFACTOR: " << loadFactor << endl;
+			cerr << endl;
+			*/
 		}
 	}
 	// Delete copy
